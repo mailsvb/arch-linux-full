@@ -1,0 +1,11 @@
+## mailsvb/arch-linux-full
+FROM archlinux/base
+MAINTAINER mailsvb <mailsvb@gmail.com>
+ADD pacman.conf /etc/pacman.conf
+RUN echo "$(curl --silent "https://www.archlinux.org/mirrorlist/?country=AT&country=DE&country=NO&country=SE&country=CH&country=NL&protocol=https&ip_version=4&use_mirror_status=on" | sed -e 's/^#Server/Server/g')" > /etc/pacman.d/mirrorlist
+RUN pacman -Syu --noconfirm
+RUN pacman -Scc --noconfirm
+RUN find /usr/share/terminfo/. ! -name "*xterm*" ! -name "*screen*" ! -name "*screen*" -type f -delete
+RUN find /. -name "*~" -type f -delete
+RUN rm -rf /var/lib/pacman/sync/* /tmp/*
+CMD /bin/bash
